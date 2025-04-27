@@ -39,7 +39,7 @@ aux_source_directory(. PROJECT_SOURCES)
 
 # Add executable. Default name is the project name, version 0.1
 add_executable(blink
-    blink.c
+    blink.cpp
     ${PROJECT_SOURCES}
     ${DRV8245HW}
     )
