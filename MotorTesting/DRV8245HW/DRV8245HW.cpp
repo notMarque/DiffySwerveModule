@@ -36,15 +36,19 @@ void DRV8245HW::init(){
     // Wait until it recognizes sleep pulse
     while(gpio_get(FAULT_N) == true)
     {
-      // nada
+      printf("motors not recognizing wakeup\n");
     } 
     gpio_put(SLEEP_N, false);
     sleep_ms(.008);
     gpio_put(SLEEP_N, true);
 
     while(!gpio_get(FAULT_N)) {
-       // nada
+      printf("motors not responding to second pulse\n");
+      gpio_put(SLEEP_N, false);
+      sleep_ms(.008);
+      gpio_put(SLEEP_N, true);
     }
+    printf("Motor wakeup\n");
   }
 
   void DRV8245HW::setMotorEffort(double effort){
@@ -61,4 +65,42 @@ void DRV8245HW::init(){
        pwm_set_gpio_level(MOTOR_DRIVE_PIN,0);
        //TODO: Put warning here once serial works
     }
- }
+   }
+
+   void DRV8245HW::initMultiple(std::vector<uint16_t> FaultPins, std::vector<uint16_t> SleepPins){
+      //Init Sleep Pins
+      for (uint16_t SleepPin : SleepPins) {
+         gpio_init(SleepPin);
+         gpio_set_dir(SleepPin, GPIO_OUT);
+      }
+      
+      //Init Fault
+      for(uint16_t FaultPin : FaultPins){
+         gpio_init(FaultPin);
+         gpio_set_dir(FaultPin, GPIO_IN);
+      }
+      
+      //send wake up pulse
+      for (uint16_t SleepPin : SleepPins) {
+      gpio_put(SleepPin, true);
+      }
+
+      // Wait until they recognize wake up pulse
+      while(gpio_get(SleepPins[0]) == true)
+      {
+         printf("motors not recognizing wakeup\n");
+      } 
+
+      //Send wake up confirm for all 
+      for (uint16_t SleepPin : SleepPins) {
+      gpio_put(SleepPin, false);
+      }
+      sleep_ms(.008);
+      for (uint16_t SleepPin : SleepPins) {
+      gpio_put(SleepPin, true);
+      }
+      while(!gpio_get(SleepPins[1])) {
+         printf("motors not responding to second pulse\n");
+      }
+   }
+ 

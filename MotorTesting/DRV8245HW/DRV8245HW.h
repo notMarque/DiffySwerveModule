@@ -1,6 +1,8 @@
 #pragma once 
+#include <stdio.h>
 #include "hardware/pwm.h"
 #include "pico/stdlib.h"
+#include <vector>
 
 class DRV8245HW
 { 
@@ -16,4 +18,6 @@ class DRV8245HW
     void init(void);
     void setMotorEffort(double);
     void setParams(uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);
+    void initMultiple(std::vector<uint16_t> FaultPins, std::vector<uint16_t> SleepPins);
+    
 };

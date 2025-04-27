@@ -28,7 +28,7 @@ set(PICO_BOARD pico CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(blink C CXX ASM)
+project(MotorTesting C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
@@ -38,23 +38,30 @@ aux_source_directory(./DRV8245HW DRV8245HW)
 aux_source_directory(. PROJECT_SOURCES)
 
 # Add executable. Default name is the project name, version 0.1
-add_executable(blink
-    blink.cpp
+
+add_executable(MotorTesting 
+    MotorTesting.cpp
     ${PROJECT_SOURCES}
-    ${DRV8245HW}
-    )
-target_include_directories(blink PRIVATE
+    ${DRV8245HW} )
+
+target_include_directories(MotorTesting PRIVATE
     ./DRV8245HW/DRV8245HW)
 
-# pull in common dependencies
-target_link_libraries(blink pico_stdlib hardware_gpio hardware_pwm)
+pico_set_program_name(MotorTesting "MotorTesting")
+pico_set_program_version(MotorTesting "0.1")
 
+# Modify the below lines to enable/disable output over UART/USB
+pico_enable_stdio_uart(MotorTesting 0)
+pico_enable_stdio_usb(MotorTesting 1)
 
-if (PICO_CYW43_SUPPORTED)
-    target_link_libraries(blink pico_cyw43_arch_none)
-endif()
+# Add the standard library to the build
+target_link_libraries(MotorTesting
+        pico_stdlib hardware_gpio hardware_pwm)
 
-# create map/bin/hex file etc.
-pico_add_extra_outputs(blink)
+# Add the standard include files to the build
+target_include_directories(MotorTesting PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+)
+pico_enable_stdio_usb(MotorTesting 1)
+pico_add_extra_outputs(MotorTesting)
 
-# add url via pico_set_program_url
