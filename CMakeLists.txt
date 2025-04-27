@@ -33,16 +33,21 @@ project(blink C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
+#DRV8245HW libraries
+aux_source_directory(./DRV8245HW DRV8245HW)
+aux_source_directory(. PROJECT_SOURCES)
 
+# Add executable. Default name is the project name, version 0.1
 add_executable(blink
     blink.c
+    ${PROJECT_SOURCES}
+    ${DRV8245HW}
     )
-
-
+target_include_directories(blink PRIVATE
+    ./DRV8245HW/DRV8245HW)
 
 # pull in common dependencies
-target_link_libraries(blink pico_stdlib hardware_gpio DRV8245HW)
+target_link_libraries(blink pico_stdlib hardware_gpio hardware_pwm)
 
 
 if (PICO_CYW43_SUPPORTED)

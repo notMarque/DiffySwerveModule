@@ -1,6 +1,15 @@
 
 #include "DRV8245HW.h"
 
+#define LED_DELAY_MS 500
+#define BLUE_LED 21 //2B
+#define GREEN_LED 22
+#define MOTOR_DRIVE_PIN 14
+#define MOTOR_DIRECT_PIN 13
+#define SLEEP_N 10
+#define FAULT_N 12 
+#define motorSlice 12500
+
 void DRV8245HW::init(void){
 
     //Init Blue LED
