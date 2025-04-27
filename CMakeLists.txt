@@ -39,8 +39,11 @@ add_executable(blink
     blink.c
     )
 
+
+
 # pull in common dependencies
-target_link_libraries(blink pico_stdlib hardware_gpio hardware_pwm)
+target_link_libraries(blink pico_stdlib hardware_gpio DRV8245HW)
+
 
 if (PICO_CYW43_SUPPORTED)
     target_link_libraries(blink pico_cyw43_arch_none)
