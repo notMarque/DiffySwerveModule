@@ -1,4 +1,5 @@
 #include "pico/stdlib.h"
+#include <stdio.h>
 
 #define LED_DELAY_MS 500
 #define BLUE_LED 21
@@ -7,6 +8,8 @@
 
 
 int main() {
+    stdio_init_all();
+
     gpio_init(BLUE_LED);
     gpio_set_dir(BLUE_LED, GPIO_OUT);
 
@@ -23,5 +26,6 @@ int main() {
         gpio_put(GREEN_LED, true);
 
         sleep_ms(LED_DELAY_MS);
+        puts("hello");
     }
 }
