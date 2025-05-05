@@ -45,7 +45,7 @@ pico_enable_stdio_usb(blink 1)
 pico_enable_stdio_uart(blink 0)
 
 # pull in common dependencies
-target_link_libraries(blink pico_stdlib pico_i2c_slave hardware_i2c)
+target_link_libraries(blink irp_i2c.c pico_stdlib pico_i2c_slave hardware_i2c hardware_pwm)
 
 if (PICO_CYW43_SUPPORTED)
     target_link_libraries(blink pico_cyw43_arch_none)
