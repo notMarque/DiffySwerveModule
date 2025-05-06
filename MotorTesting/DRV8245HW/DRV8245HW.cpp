@@ -57,13 +57,13 @@ void DRV8245HW::init(){
        pwm_set_gpio_level(MOTOR_DRIVE_PIN, 0);
     } else if(0 < effort && effort <= 1){
        gpio_put(MOTOR_DIRECT_PIN, true);
-       pwm_set_gpio_level(MOTOR_DRIVE_PIN, effort * motorSlice);
+       pwm_set_gpio_level(MOTOR_DRIVE_PIN, (1-effort) * motorSlice);
     } else if (-1 <= effort){
        gpio_put(MOTOR_DIRECT_PIN, false);
-       pwm_set_gpio_level(MOTOR_DRIVE_PIN, -1 * effort * motorSlice);
+       pwm_set_gpio_level(MOTOR_DRIVE_PIN, -1 * (1- effort) * motorSlice);
     } else {
        pwm_set_gpio_level(MOTOR_DRIVE_PIN,0);
-       //TODO: Put warning here once serial works
+       printf("WARNING: MOTOR EFFORT OUTSIDE OF BOUNDS");
     }
    }
 
