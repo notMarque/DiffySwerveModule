@@ -26,6 +26,13 @@
 #define RIGHT_KP -0.000001
 #define RIGHT_KI -0.00000005
 
+#define SPACES "                              "
+#define AS5600_SDA 2
+#define AS5600_SCL 3
+
+#define TICKS_PER_SECOND_PER_DEGREE 3333
+#define ANGULAR_KI 1
+
 const uint LEFT_ENCODER_PIN_A = 8;
 PIO LEFT_PIO = pio0;
 const uint LEFT_SM = 0;
