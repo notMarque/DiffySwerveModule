@@ -5,6 +5,7 @@
 #include <hardware/i2c.h>
 #include <pico/i2c_slave.h>
 #include <string.h>
+#include <structs.h>
 
 class modulei2c {
 public:
@@ -16,8 +17,8 @@ public:
     static const uint I2C_SLAVE_SDA_PIN = 4;
     static const uint I2C_SLAVE_SCL_PIN = 5;
 
-
     static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event);
     static void setup_slave();
-    static void read_message();
+    static void read_message(ModuleState&);
+    static void save_to_mem(ModuleState&);
 };

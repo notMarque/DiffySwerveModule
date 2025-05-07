@@ -1,5 +1,4 @@
 #include <modulei2c.h>
-#include <structs.h>
 
 // The slave implements a 256 byte memory. To write a series of bytes, the master first
 // writes the memory address, followed by the data. The address is automatically incremented
@@ -11,8 +10,6 @@ static struct
     uint8_t mem_address;
     bool mem_address_written;
 } context;
-
-ModuleState state2 = ModuleState(1, 2, 3, 4, 5);
 
 // Our handler is called from the I2C ISR, so it must complete quickly. Blocking calls /
 // printing to stdio may interfere with interrupt handling.
@@ -56,29 +53,22 @@ void modulei2c::setup_slave() {
     i2c_slave_init(i2c0, I2C_SLAVE_ADDRESS, &i2c_slave_handler);
 }
 
-void modulei2c::read_message() {
-    ModuleState reading = ModuleState();
+void modulei2c::read_message(ModuleState& state) {
     uint8_t msgLength = sizeof(ModuleState);
-    memcpy(&reading, context.mem, msgLength);
-    printf("%d", reading.state);
+    memcpy(&state, context.mem, msgLength);
+    printf("%d", state.state);
     puts("\n");
-    printf("%d", reading.theta);
+    printf("%d", state.theta);
     puts("\n");
-    printf("%d", reading.v);
+    printf("%d", state.v);
     puts("\n");
-    printf("%d", reading.bat);
+    printf("%d", state.bat);
     puts("\n");
-    printf("%d", reading.time);
+    printf("%d", state.time);
     puts("\n");
-    puts("\n");
-    puts("Are we there yet?");
-    puts("\n");
-    puts("\n");
-    puts("\n");
-    puts("\n");
-    puts("\n");
-    puts("\n");
-    puts("\n");
-    puts("\n");
-    puts("\n");
+}
+
+void modulei2c::save_to_mem(ModuleState& state) {
+    uint8_t msgLength = sizeof(state);
+    memcpy(&context.mem[14], &state, msgLength);
 }

@@ -1,5 +1,4 @@
 #include <maini2c.h>
-#include <structs.h>
 
 // The slave implements a 256 byte memory. To write a series of bytes, the master first
 // writes the memory address, followed by the data. The address is automatically incremented
@@ -12,7 +11,6 @@ static struct
     bool mem_address_written;
 } context;
 
-ModuleState state = ModuleState(1, 2, 3, 4, 5);
 
 void maini2c::run_master() {
     
@@ -69,7 +67,7 @@ void maini2c::init_master() {
 
 }
 
-void maini2c::send_message() {
+void maini2c::send_message(ModuleState state) {
     uint8_t msgLength = sizeof(ModuleState);
     uint8_t buf[msgLength + 1];
     buf[0] = 0;
@@ -80,4 +78,35 @@ void maini2c::send_message() {
         return;
     }
     hard_assert(count == 1 + msgLength);
+}
+
+void maini2c::read_message(ModuleState& state) {
+    uint8_t msgLength = sizeof(state);
+    uint8_t buf[msgLength];
+    uint8_t address = 14;
+    // seek to mem_address
+    int count = i2c_write_blocking(i2c1, I2C_SLAVE_ADDRESS, &address, 1, true);
+    printf("I am ashamed to say that I wrote %d bytes\n\n", count);
+    hard_assert(count == 1);
+    // partial read
+    uint8_t split = 5;
+    count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, split, true);
+    hard_assert(count == split);
+    
+    // read the remaining bytes, continuing from last address
+    count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf + split, msgLength - split, false);
+
+    memcpy(&state, buf, msgLength);
+
+    printf("%d", state.state);
+    puts("\n");
+    printf("%d", state.theta);
+    puts("\n");
+    printf("%d", state.v);
+    puts("\n");
+    printf("%d", state.bat);
+    puts("\n");
+    printf("%d", state.time);
+    puts("\n");
+
 }

@@ -5,6 +5,7 @@
 #include <hardware/i2c.h>
 #include <pico/i2c_slave.h>
 #include <string.h>
+#include <structs.h>
 
 class maini2c {
 public:
@@ -18,6 +19,7 @@ public:
 
 
     static void run_master();
-    static void send_message();
+    static void send_message(ModuleState);
     static void init_master();
+    static void read_message(ModuleState&);
 };
