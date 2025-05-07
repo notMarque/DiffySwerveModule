@@ -48,6 +48,7 @@ void DRV8245HW::init(){
       sleep_ms(.008);
       gpio_put(SLEEP_N, true);
     }
+    setMotorEffort(0);
     printf("Motor wakeup\n");
   }
 
@@ -55,12 +56,12 @@ void DRV8245HW::init(){
     if(effort == 0)
     {
        pwm_set_gpio_level(MOTOR_DRIVE_PIN, 0);
-    } else if(0 < effort && effort <= 1){
-       gpio_put(MOTOR_DIRECT_PIN, true);
-       pwm_set_gpio_level(MOTOR_DRIVE_PIN, (1-effort) * motorSlice);
-    } else if (-1 <= effort){
+    } else if(0 < effort && effort <= 1.01){
        gpio_put(MOTOR_DIRECT_PIN, false);
-       pwm_set_gpio_level(MOTOR_DRIVE_PIN, -1 * (1- effort) * motorSlice);
+       pwm_set_gpio_level(MOTOR_DRIVE_PIN, effort * motorSlice);
+    } else if (-1.01 <= effort){
+       gpio_put(MOTOR_DIRECT_PIN, true);
+       pwm_set_gpio_level(MOTOR_DRIVE_PIN, (-effort) * motorSlice);
     } else {
        pwm_set_gpio_level(MOTOR_DRIVE_PIN,0);
        printf("WARNING: MOTOR EFFORT OUTSIDE OF BOUNDS");
