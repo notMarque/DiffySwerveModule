@@ -18,7 +18,7 @@ as5600_t as5600 = { 0 };
 static float value;
 double desiredHeading = 0;
 double sumHeadingError = 0;
-
+double linearSpeed = 200000;
 void loop(void){
    //printf("Looping \n");
    
@@ -50,14 +50,13 @@ void loop(void){
    if(-.01 < headingError && headingError < .01 )
    {
    sumHeadingError = 0;
-   leftMotor.setSpeed(0);
-   rightMotor.setSpeed(0);
+   leftMotor.setSpeed(0 + linearSpeed/2);
+   rightMotor.setSpeed(0 - linearSpeed/2);
    } else {
-   leftMotor.setSpeed(turnSpeed/2);
-   rightMotor.setSpeed(turnSpeed/2);
+   leftMotor.setSpeed(turnSpeed/2 + linearSpeed/2);
+   rightMotor.setSpeed(turnSpeed/2 - linearSpeed/2);
    }
    
-
    leftMotor.update(false);
    rightMotor.update(false);
    printf(">Heading :");
