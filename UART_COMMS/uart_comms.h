@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/irq.h"
-
+#include "STRUCTS/structs.h"
 
 /**
  * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.

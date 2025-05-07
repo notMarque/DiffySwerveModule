@@ -37,6 +37,7 @@ pico_sdk_init()
 aux_source_directory(./DRV8245HW DRV8245HW)
 aux_source_directory(./EncoderLib EncoderLib)
 aux_source_directory(./UART_COMMS UART_COMMS)
+aux_source_directory(./STRUCTS STRUCTS)
 aux_source_directory(. PROJECT_SOURCES)
 
 # Add executable. Default name is the project name, version 0.1
@@ -46,13 +47,15 @@ add_executable(MotorTesting
     ${PROJECT_SOURCES}
     ${DRV8245HW}
     ${EncoderLib}
-    ${UART_COMMS})
+    ${UART_COMMS}
+    ${STRUCTS})
 
 pico_generate_pio_header(MotorTesting ${CMAKE_CURRENT_LIST_DIR}./EncoderLib/quadrature_encoder_substep.pio)
 
 target_include_directories(MotorTesting PRIVATE ./EncoderLib/quadrature_encoder_substep)
 target_include_directories(MotorTesting PRIVATE ./DRV8245HW/DRV8245HW)
 target_include_directories(MotorTesting PRIVATE ./UART_COMMS/uart_comms)
+target_include_directories(MotorTesting PRIVATE ./STRUCTS/structs)
 
 pico_set_program_name(MotorTesting "MotorTesting")
 pico_set_program_version(MotorTesting "0.1")
