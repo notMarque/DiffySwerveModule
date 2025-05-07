@@ -4,6 +4,7 @@
 #include "./DRV8245HW/DRV8245HW.h"
 #include "./EncoderLib/quadrature_encoder_substep.h"
 #include "Params.h"
+#include "UART_COMMS/uart_comms.h"
 
 
 bool countUp = true;
@@ -44,48 +45,20 @@ void initLED(void){
 
 
 int main() {
-  //Init Green LED
-  stdio_init_all();
-  initLED();
-  leftMotor.SetParams(
-      LEFT_MOTOR_DRIVE_PIN,  
-      LEFT_MOTOR_DIRECT_PIN, 
-      LEFT_FAULT_N,  
-      LEFT_SLEEP_N,  
-      MOTORSLICE, 
-      LEFT_PIO, 
-      LEFT_SM, 
-      LEFT_ENCODER_PIN_A, 
-      LEFT_KP, 
-      LEFT_KI, 
-      LEFT_KV
- );
+   uart_comms comms;
 
- rightMotor.SetParams(
-   RIGHT_MOTOR_DRIVE_PIN,  
-   RIGHT_MOTOR_DIRECT_PIN, 
-   RIGHT_FAULT_N,  
-   RIGHT_SLEEP_N,  
-   MOTORSLICE, 
-   RIGHT_PIO, 
-   RIGHT_SM, 
-   RIGHT_ENCODER_PIN_A, 
-   RIGHT_KP, 
-   RIGHT_KI, 
-   RIGHT_KV
-); 
 
-  gpio_put(GREEN_LED, true);
-  gpio_put(BLUE_LED, true);
-  
-  leftMotor.setSpeed(300000);
-  leftMotor.update(false);
-  //rightMotor.setSpeed(300000);
-  //rightMotor.update(false);
+   
 
-  while (true) {
-     loop();
-  } 
+   // OK, all set up.
+   // Lets send a basic string out, and then run a loop and wait for RX interrupts
+   // The handler will count them, but also reflect the incoming data back with a slight change!
+   uart_puts(UART_ID, "\nHello, uart interrupts\n");
+
+   while (1)
+         tight_loop_contents();
+
+
 }
 
 
