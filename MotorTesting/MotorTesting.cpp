@@ -2,7 +2,6 @@
 #include "pico/stdlib.h"
 #include "./DRV8245HW/DRV8245HW.h"
 #include "./EncoderLib/quadrature_encoder_substep.h"
-#include "./dwm_pico_AS5600/dwm_pico_AS5600.h"
 #define GREEN_LED 21
 #define BLUE_LED 22 
 #define LED_DELAY_MS 500
