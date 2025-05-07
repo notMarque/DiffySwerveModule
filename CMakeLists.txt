@@ -36,18 +36,21 @@ pico_sdk_init()
 
 # add other libraries
 aux_source_directory(./I2C I2C)
+aux_source_directory(./STRUCTS STRUCTS)
 aux_source_directory(. PROJECT_SOURCES)
 
 # Add executable. Default name is the project name, version 0.1
 add_executable(blink
     blink.cpp
         ${I2C}
+        ${STRUCTS}
         ${PROJECT_SOURCES}
 
     )
 
 target_include_directories(blink PRIVATE
-    ./I2C)
+    ./I2C
+    ./STRUCTS)
 
 # enable/disable stdio over uart/usb
 pico_enable_stdio_usb(blink 1)

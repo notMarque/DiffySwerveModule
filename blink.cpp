@@ -3,6 +3,7 @@
 #include <hardware/pwm.h>
 #include "hardware/clocks.h"
 #include <string.h>
+#include <maini2c.h>
 #include <modulei2c.h>
 
 #define LED_DELAY_MS 500
@@ -22,10 +23,20 @@ int main() {
 
     puts("\nI2C slave example");
 
-    modulei2c thisi2c;
+    maini2c hub;
+    modulei2c module;
 
-    thisi2c.setup_slave();
-    thisi2c.run_master();
+    //hub.setup_slave();
+    module.setup_slave();
+    hub.init_master();
+    //thisi2c.run_master();
+    for (int i = 0; i < 50; i++) {
+        sleep_ms(100);
+        puts("howdy");
+    }
+    hub.send_message();
+    sleep_ms(100);
+    module.read_message();
 
     // while (true) {
     //     thisi2c.run_master();
