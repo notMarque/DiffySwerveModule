@@ -39,7 +39,7 @@ void modulei2c::i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
     }
 }
 
-void modulei2c::setup_slave() {
+void modulei2c::setup_slave(uint address) {
     gpio_init(I2C_SLAVE_SDA_PIN);
     gpio_set_function(I2C_SLAVE_SDA_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(I2C_SLAVE_SDA_PIN);
@@ -50,7 +50,7 @@ void modulei2c::setup_slave() {
 
     i2c_init(i2c0, I2C_BAUDRATE);
     // configure I2C0 for slave mode
-    i2c_slave_init(i2c0, I2C_SLAVE_ADDRESS, &i2c_slave_handler);
+    i2c_slave_init(i2c0, address, &i2c_slave_handler);
 }
 
 void modulei2c::read_message(ModuleState& state) {

@@ -20,18 +20,18 @@ int main() {
 
 
     //hub.setup_slave();
-    module.setup_slave();
+    module.setup_slave(0x17);
     hub.init_master();
     //thisi2c.run_master();
     for (int i = 0; i < 30; i++) {
         sleep_ms(100);
         puts("howdy");
     }
-    hub.send_message(state);
+    hub.send_message(state, 0x17);
     module.save_to_mem(state);
     sleep_ms(100);
     module.read_message(state);
-    hub.read_message(returnState);
+    hub.read_message(returnState, 0x17);
 
     
 }
