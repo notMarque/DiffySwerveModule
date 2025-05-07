@@ -7,7 +7,8 @@ extern "C" {
    #include "./pico_as5600/pico_as5600.h" 
 }
 #include "Params.h"
-
+#include "I2C/modulei2c.h"
+#include "STRUCTS/structs.h"
 
 bool countUp = true;
 double motorOut = 0;
