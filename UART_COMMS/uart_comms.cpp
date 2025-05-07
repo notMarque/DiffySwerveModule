@@ -1,11 +1,11 @@
 #include "uart_comms.h"
 
+ 
+BotState uart_comms::botSt;
+uint8_t uart_comms::mvIndex = 0;
+uint8_t uart_comms::mvArray[sizeof(mvArray)]; // Give a size if needed
 
- 
- 
- 
- 
- 
+
  // RX interrupt handler
  void uart_comms::on_uart_rx() {
      while (uart_is_readable(UART_ID)) {
@@ -21,6 +21,7 @@
  }
  
  void uart_comms::init_uart_comms(){
+
     // Set up our UART with a basic baud rate.
    uart_init(UART_ID, 2400);
 
@@ -49,9 +50,58 @@
    int UART_IRQ = UART_ID == uart0 ? UART0_IRQ : UART1_IRQ;
 
    // And set up and enable the interrupt handlers
-   irq_set_exclusive_handler(UART_IRQ, on_uart_rx);
+   irq_set_exclusive_handler(UART_IRQ, checkUART);
    irq_set_enabled(UART_IRQ, true);
 
    // Now enable the UART to send interrupts - RX only
    uart_set_irq_enables(UART_ID, true, false);
  }
+
+ void uart_comms::checkUART(void)  
+{
+  bool retVal = false;
+  while(uart_is_readable(UART_ID))
+  {
+    uint8_t b = uart_getc(UART_ID);
+    printf("X Value: %d \n", b);
+
+    if(handleUART(b))
+    {
+      memcpy(&botSt, &mvArray, sizeof(botSt));
+      retVal = true;
+    }
+  }
+
+  //return retVal;
+}
+
+bool uart_comms::handleUART(uint8_t b)
+{
+  bool retVal = false;
+  switch(mvIndex)
+  {
+    case 0:
+      if(b == 0xff) mvIndex++; //first byte must be 0xff
+      break;
+    case 1:
+      if(b == 0x55) mvIndex++;
+      else mvIndex = 0; //didn't get the 0x55 byte, so restart
+      break;
+    case 9:
+      if(b == 0xaa) //correct end byte, so process
+      {
+        retVal = true;
+        mvIndex = 0;
+      } 
+      else mvIndex = 0; //didn't get the aa byte, so restart
+      break;
+    case  10:
+      puts("Something is very wrong!"); //PANIC
+      break;
+    default:
+      mvArray[mvIndex++] = b;
+  }
+
+  return retVal;
+}
+
