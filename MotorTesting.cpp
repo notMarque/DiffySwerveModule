@@ -23,11 +23,11 @@ void loop(void){
    //printf("Looping \n");
    
   if(countUp){
-     motorOut += 250;
-     countUp = motorOut <= 20000;
+   desiredHeading += 1;
+     countUp = desiredHeading <= 270;
   } else {
-     motorOut += -250;
-     countUp = motorOut <= 0;
+   desiredHeading += -1;
+     countUp = desiredHeading <= 0;
   }
   
   //rightMotor.setSpeed(10000);
@@ -47,7 +47,7 @@ void loop(void){
    sumHeadingError += headingError;
    double turnSpeed = headingError * TICKS_PER_SECOND_PER_DEGREE + sumHeadingError * ANGULAR_KI;
    
-   if(-1 < headingError && headingError < 1 )
+   if(-.01 < headingError && headingError < .01 )
    {
    sumHeadingError = 0;
    leftMotor.setSpeed(0);
@@ -69,6 +69,7 @@ void loop(void){
    printf(">Turn Speed :");
    printf("%f \n", turnSpeed);
    // run at roughly 100Hz
+
    sleep_ms(MOTOR_LOOP_MS);
 }
 
@@ -127,10 +128,6 @@ int main() {
 
    // Setup as5600
    as5600_init(AS5600_SDA, AS5600_SCL, &as5600);
-
-
-   // Display raw angle
-   //print_msg("AS5600 read raw angle");
 
    as5600_write_zpos(&as5600, 787);
 
