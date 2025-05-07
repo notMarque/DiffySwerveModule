@@ -4,6 +4,7 @@
 #include "./DRV8245HW/DRV8245HW.h"
 #include "./EncoderLib/quadrature_encoder_substep.h"
 #include "Params.h"
+#include "Kinematics/kinematics.h"
 
 
 bool countUp = true;

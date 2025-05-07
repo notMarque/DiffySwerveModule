@@ -44,12 +44,14 @@ add_executable(MotorTesting
     MotorTesting.cpp
     ${PROJECT_SOURCES}
     ${DRV8245HW}
-    ${EncoderLib})
+    ${EncoderLib}
+    ${Kinematics})
 
 pico_generate_pio_header(MotorTesting ${CMAKE_CURRENT_LIST_DIR}./EncoderLib/quadrature_encoder_substep.pio)
 
 target_include_directories(MotorTesting PRIVATE ./EncoderLib/quadrature_encoder_substep)
 target_include_directories(MotorTesting PRIVATE ./DRV8245HW/DRV8245HW)
+target_include_directories(MotorTesting PRIVATE ./Kinematics/kinematics)
 
 pico_set_program_name(MotorTesting "MotorTesting")
 pico_set_program_version(MotorTesting "0.1")
