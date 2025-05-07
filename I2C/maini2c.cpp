@@ -1,25 +1,4 @@
-#include "pico/stdlib.h"
-#include <stdio.h>
-#include <hardware/i2c.h>
-#include <pico/i2c_slave.h>
-#include <hardware/pwm.h>
-#include "hardware/clocks.h"
-#include <string.h>
-
-
-#define LED_DELAY_MS 500
-#define BLUE_LED 21
-#define GREEN_LED 22
-
-static const uint I2C_SLAVE_ADDRESS = 0x17;
-static const uint I2C_BAUDRATE = 100000; // 100 kHz
-
-// For this example, we run both the master and slave from the same board.
-// You'll need to wire pin GP4 to GP6 (SDA), and pin GP5 to GP7 (SCL).
-static const uint I2C_SLAVE_SDA_PIN = 4;
-static const uint I2C_SLAVE_SCL_PIN = 4;
-static const uint I2C_MASTER_SDA_PIN = 6;
-static const uint I2C_MASTER_SCL_PIN = 7;
+#include <maini2c.h>
 
 // The slave implements a 256 byte memory. To write a series of bytes, the master first
 // writes the memory address, followed by the data. The address is automatically incremented
@@ -32,9 +11,10 @@ static struct
     bool mem_address_written;
 } context;
 
+
 // Our handler is called from the I2C ISR, so it must complete quickly. Blocking calls /
 // printing to stdio may interfere with interrupt handling.
-static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
+void maini2c::i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
     switch (event) {
     case I2C_SLAVE_RECEIVE: // master has written some data
         if (!context.mem_address_written) {
@@ -60,7 +40,11 @@ static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
     }
 }
 
-static void setup_slave() {
+uint8_t maini2c::getByte(uint8_t address) {
+    return (uint8_t) context.mem[address];
+}
+
+void maini2c::setup_slave() {
     gpio_init(I2C_SLAVE_SDA_PIN);
     gpio_set_function(I2C_SLAVE_SDA_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(I2C_SLAVE_SDA_PIN);
@@ -74,7 +58,7 @@ static void setup_slave() {
     i2c_slave_init(i2c0, I2C_SLAVE_ADDRESS, &i2c_slave_handler);
 }
 
-static void run_master() {
+void maini2c::run_master() {
     gpio_init(I2C_MASTER_SDA_PIN);
     gpio_set_function(I2C_MASTER_SDA_PIN, GPIO_FUNC_I2C);
     // pull-ups are already active on slave side, this is just a fail-safe in case the wiring is faulty
@@ -123,36 +107,4 @@ static void run_master() {
         puts("");
         sleep_ms(2000);
     }
-}
-
-
-int main() {
-    stdio_init_all();
-
-    // gpio_init(BLUE_LED);
-    // gpio_set_dir(BLUE_LED, GPIO_OUT);
-
-    // gpio_init(GREEN_LED);
-    // gpio_set_dir(GREEN_LED, GPIO_OUT);
-
-    puts("\nI2C slave example");
-
-    setup_slave();
-    run_master();
-
-    // while (true) {
-    //     gpio_put(BLUE_LED, true);
-    //     gpio_put(GREEN_LED, false);
-
-    //     sleep_ms(LED_DELAY_MS);
-
-    //     gpio_put(BLUE_LED, false);
-    //     gpio_put(GREEN_LED, true);
-
-    //     sleep_ms(LED_DELAY_MS);
-        
-    //     uint32_t sys_clk_hz = clock_get_hz(clk_sys);
-
-    //     printf("RP2040 System Clock Frequency: %lu Hz\n", sys_clk_hz);
-    //}
 }

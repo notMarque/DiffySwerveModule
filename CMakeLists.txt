@@ -33,19 +33,28 @@ project(blink C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
 
+# add other libraries
+aux_source_directory(./I2C I2C)
+aux_source_directory(. PROJECT_SOURCES)
+
+# Add executable. Default name is the project name, version 0.1
 add_executable(blink
-    blink.c
+    blink.cpp
+        ${I2C}
+        ${PROJECT_SOURCES}
+
     )
 
+target_include_directories(blink PRIVATE
+    ./I2C)
 
 # enable/disable stdio over uart/usb
 pico_enable_stdio_usb(blink 1)
 pico_enable_stdio_uart(blink 0)
 
 # pull in common dependencies
-target_link_libraries(blink irp_i2c.c pico_stdlib pico_i2c_slave hardware_i2c hardware_pwm)
+target_link_libraries(blink pico_stdlib pico_i2c_slave hardware_i2c hardware_pwm)
 
 if (PICO_CYW43_SUPPORTED)
     target_link_libraries(blink pico_cyw43_arch_none)
