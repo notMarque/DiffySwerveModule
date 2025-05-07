@@ -1,31 +1,60 @@
 #include "pico/stdlib.h"
 #include <stdio.h>
-
-#define LED_DELAY_MS 500
-#define BLUE_LED 21
-#define GREEN_LED 22
-
+#include "lib/pico_as5600/pico_as5600.h"
+#include "hardware/gpio.h"
+#include "hardware/i2c.h"
 
 
-int main() {
+#define SPACES "                              "
+#define AS5600_SDA 2
+#define AS5600_SCL 3
+
+// Connect SDA to pin 2 and scl to pin 3 on rp2040.
+
+
+void print_msg(char* msg)
+{
+    printf("---- %s ----" SPACES "\n", msg);
+}
+
+// Read  and print zpos (zero position), mpos (max positon), mang (max angle)
+void print_poss_and_angs(as5600_t* as5600)
+{
+    print_msg("AS5600 zpos mpos mang");
+    printf("zpos: %d\n", as5600_read_zpos(as5600));
+    printf("mpos: %d\n", as5600_read_mpos(as5600));
+    printf("mang: %d\n", as5600_read_mang(as5600));
+}
+
+int main()
+{
+    as5600_t as5600 = { 0 };
+    static float value;
+
     stdio_init_all();
+    printf("Switch serial to terminal mode so carriage return is respected!\n");
 
-    gpio_init(BLUE_LED);
-    gpio_set_dir(BLUE_LED, GPIO_OUT);
+    // Setup i2c
+    gpio_init(AS5600_SDA);
+    gpio_set_function(AS5600_SDA, GPIO_FUNC_I2C);
+    gpio_pull_up(AS5600_SDA);
 
-    gpio_init(GREEN_LED);
-    gpio_set_dir(GREEN_LED, GPIO_OUT);
+    gpio_init(AS5600_SCL);
+    gpio_set_function(AS5600_SCL, GPIO_FUNC_I2C);
+    gpio_pull_up(AS5600_SCL);
+
+    i2c_init(i2c1, 400 * 1000);
+
+    // Setup as5600
+    as5600_init(AS5600_SDA, AS5600_SCL, &as5600);
+
+
+    // Display raw angle
+    print_msg("AS5600 read raw angle");
 
     while (true) {
-        gpio_put(BLUE_LED, true);
-        gpio_put(GREEN_LED, false);
+        value = (float)as5600_read_angl(&as5600)/(float)AS5600_MAX_ANGLE*360;
 
-        sleep_ms(LED_DELAY_MS);
-
-        gpio_put(BLUE_LED, false);
-        gpio_put(GREEN_LED, true);
-
-        sleep_ms(LED_DELAY_MS);
-        puts("hello");
+        printf("Current value: %f%s\r", value, SPACES);
     }
 }
