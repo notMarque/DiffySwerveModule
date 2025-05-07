@@ -36,9 +36,7 @@ pico_sdk_init()
 #DRV8245HW libraries
 aux_source_directory(./DRV8245HW DRV8245HW)
 aux_source_directory(./EncoderLib EncoderLib)
-aux_source_directory(./dwm_pico_AS5600 AS5600)
 aux_source_directory(. PROJECT_SOURCES)
-
 
 # Add executable. Default name is the project name, version 0.1
 
@@ -46,14 +44,12 @@ add_executable(MotorTesting
     MotorTesting.cpp
     ${PROJECT_SOURCES}
     ${DRV8245HW}
-    ${EncoderLib}
-    ${AS5600} )
+    ${EncoderLib})
 
 pico_generate_pio_header(MotorTesting ${CMAKE_CURRENT_LIST_DIR}./EncoderLib/quadrature_encoder_substep.pio)
 
 target_include_directories(MotorTesting PRIVATE ./EncoderLib/quadrature_encoder_substep)
 target_include_directories(MotorTesting PRIVATE ./DRV8245HW/DRV8245HW)
-target_include_directories(MotorTesting PRIVATE ./dwm_pico_AS5600/dwm_pico_AS5600)
 
 pico_set_program_name(MotorTesting "MotorTesting")
 pico_set_program_version(MotorTesting "0.1")
