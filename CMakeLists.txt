@@ -37,7 +37,7 @@ aux_source_directory(./lib/pico_as5600 pico_as5600) #<-- Add library files
 aux_source_directory(. PROJECT_SOURCES)
 
 # Add executable. Default name is the project name
-add_executable(as5600_example blink.c ${PROJECT_SOURCES} ${pico_as5600}) #<-- Add library files to executable
+add_executable(as5600_example blink.cpp ${PROJECT_SOURCES} ${pico_as5600}) #<-- Add library files to executable
 
 target_include_directories(as5600_example PRIVATE
     ./lib/pico_as5600 #<-- Include subdirectories

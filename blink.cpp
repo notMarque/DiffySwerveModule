@@ -1,6 +1,8 @@
 #include "pico/stdlib.h"
 #include <stdio.h>
-#include "lib/pico_as5600/pico_as5600.h"
+extern "C" {
+    #include "lib/pico_as5600/pico_as5600.h"
+}
 #include "hardware/gpio.h"
 #include "hardware/i2c.h"
 
@@ -10,21 +12,6 @@
 #define AS5600_SCL 3
 
 // Connect SDA to pin 2 and scl to pin 3 on rp2040.
-
-
-void print_msg(char* msg)
-{
-    printf("---- %s ----" SPACES "\n", msg);
-}
-
-// Read  and print zpos (zero position), mpos (max positon), mang (max angle)
-void print_poss_and_angs(as5600_t* as5600)
-{
-    print_msg("AS5600 zpos mpos mang");
-    printf("zpos: %d\n", as5600_read_zpos(as5600));
-    printf("mpos: %d\n", as5600_read_mpos(as5600));
-    printf("mang: %d\n", as5600_read_mang(as5600));
-}
 
 int main()
 {
@@ -49,8 +36,7 @@ int main()
     as5600_init(AS5600_SDA, AS5600_SCL, &as5600);
 
 
-    // Display raw angle
-    print_msg("AS5600 read raw angle");
+    puts("Reads Raw Angle");
 
     as5600_write_zpos(&as5600, 787);
 
