@@ -40,7 +40,9 @@ aux_source_directory(./pico_as5600 pico_as5600)
 aux_source_directory(./I2C I2C)
 aux_source_directory(./STRUCTS STRUCTS)
 aux_source_directory(./Kinematics Kinematics)
+aux_source_directory(./UART_COMMS UART_COMMS)
 aux_source_directory(. PROJECT_SOURCES)
+
 
 # Add executable. Default name is the project name, version 0.1
 
@@ -52,7 +54,8 @@ add_executable(MotorTesting
     ${pico_as5600}
     ${I2C}
     ${STRUCTS}
-    ${Kinematics})
+    ${Kinematics}
+    ${UART_COMMS})
 
 pico_generate_pio_header(MotorTesting ${CMAKE_CURRENT_LIST_DIR}./EncoderLib/quadrature_encoder_substep.pio)
 
@@ -62,6 +65,7 @@ target_include_directories(MotorTesting PRIVATE ./pico_as5600/pico_as5600)
 target_include_directories(MotorTesting PRIVATE ./I2C/modulei2c)
 target_include_directories(MotorTesting PRIVATE ./STRUCTS/structs)
 target_include_directories(MotorTesting PRIVATE ./Kinematics/kinematics)
+target_include_directories(MotorTesting PRIVATE ./UART_COMMS/uart_comms)
 
 pico_set_program_name(MotorTesting "MotorTesting")
 pico_set_program_version(MotorTesting "0.1")
