@@ -135,6 +135,12 @@ int main() {
    gpio_put(GREEN_LED, true);
    gpio_put(BLUE_LED, true);
    
+
+   // Data reading stuff
+   modulei2c inComms;
+   inComms.setup_slave(0x17);
+
+   
    leftMotor.setSpeed(300000);
    leftMotor.update(false);
    rightMotor.setSpeed(000000);
