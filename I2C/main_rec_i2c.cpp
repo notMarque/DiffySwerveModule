@@ -1,4 +1,4 @@
-#include <main_rec_i2c.h>
+#include <I2C/main_rec_i2c.h>
 
 // The slave implements a 256 byte memory. To write a series of bytes, the master first
 // writes the memory address, followed by the data. The address is automatically incremented

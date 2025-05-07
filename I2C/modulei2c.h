@@ -5,7 +5,7 @@
 #include <hardware/i2c.h>
 #include <pico/i2c_slave.h>
 #include <string.h>
-#include <structs.h>
+#include <STRUCTS/structs.h>
 
 class modulei2c {
 public:

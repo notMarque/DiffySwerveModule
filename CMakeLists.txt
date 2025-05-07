@@ -76,6 +76,8 @@ target_link_libraries(
         hardware_pwm
         hardware_watchdog
         hardware_pio
+        hardware_i2c
+        pico_i2c_slave 
         hardware_i2c)
 
 # Add the standard include files to the build

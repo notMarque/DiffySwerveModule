@@ -1,4 +1,4 @@
-#include <maini2c.h>
+#include <I2C/maini2c.h>
 
 // The slave implements a 256 byte memory. To write a series of bytes, the master first
 // writes the memory address, followed by the data. The address is automatically incremented
