@@ -52,6 +52,8 @@ int main()
     // Display raw angle
     print_msg("AS5600 read raw angle");
 
+    as5600_write_zpos(&as5600, 787);
+
     while (true) {
         value = (float)as5600_read_angl(&as5600)/(float)AS5600_MAX_ANGLE*360;
 
