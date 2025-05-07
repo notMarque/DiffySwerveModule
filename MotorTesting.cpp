@@ -1,26 +1,27 @@
-
 #include "pico/stdlib.h"
 #include "Motor.h"
 #include "./DRV8245HW/DRV8245HW.h"
 #include "./EncoderLib/quadrature_encoder_substep.h"
 #include "Params.h"
-//#include "UART_COMMS/uart_comms.h"
+#include "UART_COMMS/uart_comms.h"
 #include <stdio.h>
 #include <string.h>
 
 
 
 int main() {
-   //uart_comms comms;
+   stdio_init_all();
+
+   uart_comms comms;
 
 
-   //comms.init_uart_comms();
+   comms.init_uart_comms();
 
 
-   while (1) {
+   for (int i = 0; i < 20; i++) {
       puts("waiting...");
       sleep_ms(100);
-      printf("\twaiting...");
+      printf("\twaiting...\n");
       sleep_ms(100);
    }
    // OK, all set up.
@@ -28,8 +29,8 @@ int main() {
    // The handler will count them, but also reflect the incoming data back with a slight change!
    //uart_puts(UART_ID, "\nHello, uart interrupts\n");
 
-   //while (1)
-   //      tight_loop_contents();
+   while (1)
+         tight_loop_contents();
          
 
 

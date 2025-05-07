@@ -62,6 +62,7 @@ uint8_t uart_comms::mvArray[sizeof(mvArray)]; // Give a size if needed
   bool retVal = false;
   while(uart_is_readable(UART_ID))
   {
+    
     uint8_t b = uart_getc(UART_ID);
     printf("X Value: %d \n", b);
 
