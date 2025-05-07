@@ -1,5 +1,5 @@
-#ifndef STRUCTS_TEST_H
-#define STRUCTS_TEST_H
+#pragma once
+#include <cstdint>
 
 // 10 bytes
 struct ModuleState {
@@ -34,5 +34,3 @@ struct Cecilia {
 
     Cecilia(float _x, float _y) : x(_x), y(_y) {}
 };
-
-#endif
